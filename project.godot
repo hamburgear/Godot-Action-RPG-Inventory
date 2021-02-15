@@ -15,7 +15,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Tetris-Diablo Style Inventory"
+config/name="Action-RPG Inventory"
 config/icon="res://icon.png"
 
 [input]

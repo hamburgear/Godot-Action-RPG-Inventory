@@ -1,42 +1,53 @@
 extends Control
 
 var arr_Items: Array
-var is_item_selected: bool = false
-var selected_item: Control
-var is_dragging_item: bool = false
-var cursor_item_drag_offset: Vector2 = Vector2(-8, -8)
-#var canvas_layer: CanvasLayer
+var bl_IsItemSelected: bool = false
+var ctrl_SelectedItem: Control
+var bl_isDraggingItem: bool = false
+var v2_CursorItemDragOffset: Vector2 = Vector2(-8, -8)
+var col_OverlappingColor: Color = Color(1, 0.36, 0.36, 1)
+var arr_OverlappingWithItems: Array
+var v2_ItemPrevPosition: Vector2
 
 func _ready():
-#	canvas_layer = $CanvasLayer
 	#Get Items from Group
 	arr_Items = get_tree().get_nodes_in_group("item")
 	
 	for item in arr_Items:
 		item.connect("gui_input", self, "cursor_in_item", [item])
-	
+		item.get_node("Sprite/Area2D").connect("area_entered", self, "overlapping_with_other_item", [item])
+		item.get_node("Sprite/Area2D").connect("area_exited", self, "not_overlapping_with_other_item", [item])
 
 func cursor_in_item(event: InputEvent, item: Control):
 	if event.is_action_pressed("select_item"):
-		is_item_selected = true
-		selected_item = item
-#		if self.has_node(selected_item.pat):
-#			self.remove_child(selected_item)
-			
-#		if !canvas_layer.has_node(selected_item):
-#			canvas_layer.add_child(selected_item)
+		bl_IsItemSelected = true
+		ctrl_SelectedItem = item
+		ctrl_SelectedItem.get_node("Sprite").set_z_index(1000)
+		v2_ItemPrevPosition = ctrl_SelectedItem.rect_position
 	
 	if event is InputEventMouseMotion:
-		if is_item_selected:
-			is_dragging_item = true
-			
+		if bl_IsItemSelected:
+			bl_isDraggingItem = true
 			
 	if event.is_action_released("select_item"):
-		print("zx")
-		is_item_selected = false
-		selected_item = null
-		is_dragging_item = false
+		ctrl_SelectedItem.get_node("Sprite").set_z_index(0)
+		if arr_OverlappingWithItems.size() > 0:
+			ctrl_SelectedItem.rect_position = v2_ItemPrevPosition
+			ctrl_SelectedItem.get_node("Sprite").modulate = Color(1, 1, 1, 1)
+			
+		bl_IsItemSelected = false
+		bl_isDraggingItem = false
+		ctrl_SelectedItem = null
 		
 func _process(delta):
-	if is_dragging_item:
-		selected_item.rect_position = self.get_global_mouse_position() + cursor_item_drag_offset
+	if bl_isDraggingItem:
+		ctrl_SelectedItem.rect_position = (self.get_global_mouse_position() + v2_CursorItemDragOffset).snapped(Vector2(32,32))
+
+func overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
+	arr_OverlappingWithItems.append(ctrl_Item)
+	ctrl_SelectedItem.get_node("Sprite").modulate = col_OverlappingColor
+	
+func not_overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
+	arr_OverlappingWithItems.erase(ctrl_Item)
+	if arr_OverlappingWithItems.size() == 0 and bl_IsItemSelected:
+		ctrl_SelectedItem.get_node("Sprite").modulate = Color(1, 1, 1, 1)

@@ -33,6 +33,12 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 320, 320 )
 
+[node name="Dagger" parent="." instance=ExtResource( 4 )]
+margin_left = 528.0
+margin_top = 64.0
+margin_right = 560.0
+margin_bottom = 96.0
+
 [node name="Shield" parent="." instance=ExtResource( 2 )]
 margin_left = 384.0
 margin_top = 32.0
@@ -41,33 +47,27 @@ margin_bottom = 128.0
 
 [node name="Axe" parent="." instance=ExtResource( 3 )]
 margin_left = 384.0
-margin_top = 160.0
+margin_top = 208.0
 margin_right = 448.0
-margin_bottom = 256.0
+margin_bottom = 304.0
 
 [node name="Hammer" parent="." instance=ExtResource( 5 )]
-margin_left = 480.0
-margin_top = 128.0
-margin_right = 512.0
-margin_bottom = 192.0
+margin_left = 528.0
+margin_top = 104.0
+margin_right = 560.0
+margin_bottom = 168.0
 
 [node name="Buckler" parent="." instance=ExtResource( 6 )]
 material = SubResource( 1 )
-margin_left = 544.0
-margin_top = 32.0
-margin_right = 608.0
-margin_bottom = 96.0
+margin_left = 568.0
+margin_top = 56.0
+margin_right = 632.0
+margin_bottom = 120.0
 
 [node name="Sword" parent="." instance=ExtResource( 7 )]
-margin_left = 544.0
-margin_top = 160.0
-margin_right = 576.0
-margin_bottom = 224.0
-
-[node name="Dagger" parent="." instance=ExtResource( 4 )]
-margin_left = 480.0
-margin_top = 64.0
-margin_right = 512.0
-margin_bottom = 96.0
+margin_left = 568.0
+margin_top = 128.0
+margin_right = 600.0
+margin_bottom = 192.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

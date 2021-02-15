@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://ItemSprites/Hammer.png" type="Texture" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 32 )
 
 [node name="Hammer" type="Control" groups=[
 "item",
@@ -11,10 +14,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="."]
-margin_right = 32.0
-margin_bottom = 64.0
+[node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
+
+[node name="Area2D" type="Area2D" parent="Sprite"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/Area2D"]
+position = Vector2( 16, 32 )
+shape = SubResource( 1 )

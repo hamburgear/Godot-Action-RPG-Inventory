@@ -1,0 +1,8 @@
+Info:
+CursorItemDragOffset
+enter/exit close near items
+
+
+Warning:
+connect must follow signal's signature
+collisionshape boundary - triggering
