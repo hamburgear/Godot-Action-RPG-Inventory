@@ -1,0 +1,9 @@
+[gd_scene format=2]
+
+[node name="InvalidOverlay" type="ColorRect"]
+margin_right = 64.0
+margin_bottom = 96.0
+color = Color( 1, 0.627451, 0.627451, 0.533333 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

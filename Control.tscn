@@ -1,0 +1,73 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Grid.png" type="Texture" id=1]
+[ext_resource path="res://Prefabs/Shield.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Prefabs/Axe.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Prefabs/Dagger.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Prefabs/Hammer.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Prefabs/Buckler.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Prefabs/Sword.tscn" type="PackedScene" id=7]
+[ext_resource path="res://InventoryManagement.gd" type="Script" id=8]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 322.0
+margin_bottom = 321.0
+color = Color( 0.109804, 0.109804, 0.109804, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 320, 320 )
+
+[node name="Shield" parent="." instance=ExtResource( 2 )]
+margin_left = 384.0
+margin_top = 32.0
+margin_right = 448.0
+margin_bottom = 128.0
+
+[node name="Axe" parent="." instance=ExtResource( 3 )]
+margin_left = 384.0
+margin_top = 160.0
+margin_right = 448.0
+margin_bottom = 256.0
+
+[node name="Hammer" parent="." instance=ExtResource( 5 )]
+margin_left = 480.0
+margin_top = 128.0
+margin_right = 512.0
+margin_bottom = 192.0
+
+[node name="Buckler" parent="." instance=ExtResource( 6 )]
+material = SubResource( 1 )
+margin_left = 544.0
+margin_top = 32.0
+margin_right = 608.0
+margin_bottom = 96.0
+
+[node name="Sword" parent="." instance=ExtResource( 7 )]
+margin_left = 544.0
+margin_top = 160.0
+margin_right = 576.0
+margin_bottom = 224.0
+
+[node name="Dagger" parent="." instance=ExtResource( 4 )]
+margin_left = 480.0
+margin_top = 64.0
+margin_right = 512.0
+margin_bottom = 96.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
