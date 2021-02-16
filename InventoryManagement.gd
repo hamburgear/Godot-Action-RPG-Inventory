@@ -1,6 +1,11 @@
 extends Control
 
-var arr_Items: Array
+var v2_TileSize: Vector2 = Vector2(32, 32)
+var v2_InventoryDimensions: Vector2 = Vector2(8, 8)
+var cr_InventoryPanel: ColorRect
+var sp_InventoryGrids: Sprite
+
+var dct_ItemSlots: Dictionary
 var bl_IsItemSelected: bool = false
 var ctrl_SelectedItem: Control
 var bl_isDraggingItem: bool = false
@@ -10,10 +15,16 @@ var arr_OverlappingWithItems: Array
 var v2_ItemPrevPosition: Vector2
 
 func _ready():
-	arr_Items = get_tree().get_nodes_in_group("item")
+	cr_InventoryPanel = $cr_InventoryPanel
+	cr_InventoryPanel.rect_size = Vector2(v2_TileSize.x * v2_InventoryDimensions.x, v2_TileSize.y * v2_InventoryDimensions.y)
 	
-	for ctrl_Item in arr_Items:
-		ctrl_Item.connect("gui_input", self, "cursor_in_item", [ctrl_Item])
+	
+	sp_InventoryGrids = $sp_InventoryGrids
+	sp_InventoryGrids.region_enabled = true
+	sp_InventoryGrids.region_rect = Rect2( 0, 0, v2_InventoryDimensions.x * v2_TileSize.x, v2_InventoryDimensions.y * v2_TileSize.y )
+	
+	for ctrl_Item in get_tree().get_nodes_in_group("item"):
+		ctrl_Item.connect("mouse_entered", self, "cursor_in_item", [ctrl_Item])
 		ctrl_Item.get_node("Sprite/Area2D").connect("area_entered", self, "overlapping_with_other_item", [ctrl_Item])
 		ctrl_Item.get_node("Sprite/Area2D").connect("area_exited", self, "not_overlapping_with_other_item", [ctrl_Item])
 

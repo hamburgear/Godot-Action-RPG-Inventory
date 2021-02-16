@@ -19,19 +19,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect" type="ColorRect" parent="."]
-margin_right = 322.0
-margin_bottom = 321.0
+[node name="cr_InventoryPanel" type="ColorRect" parent="."]
+margin_right = 32.0
+margin_bottom = 32.0
 color = Color( 0.109804, 0.109804, 0.109804, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="sp_InventoryGrids" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 centered = false
-region_enabled = true
-region_rect = Rect2( 0, 0, 320, 320 )
 
 [node name="Dagger" parent="." instance=ExtResource( 5 )]
 margin_left = 528.0
