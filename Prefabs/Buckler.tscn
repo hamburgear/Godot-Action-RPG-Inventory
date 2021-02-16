@@ -18,9 +18,7 @@ __meta__ = {
 texture = ExtResource( 1 )
 centered = false
 
-[node name="Area2D" type="Area2D" parent="Sprite" groups=[
-"item_area",
-]]
+[node name="Area2D" type="Area2D" parent="Sprite"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/Area2D"]
 position = Vector2( 32, 32 )

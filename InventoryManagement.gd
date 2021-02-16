@@ -21,7 +21,6 @@ func _ready():
 	cr_InventoryPanel = $cr_InventoryPanel
 	cr_InventoryPanel.rect_size = Vector2(v2_TileSize.x * v2_InventoryDimensions.x, v2_TileSize.y * v2_InventoryDimensions.y)
 	
-	
 	sp_InventoryGrids = $sp_InventoryGrids
 	sp_InventoryGrids.region_enabled = true
 	sp_InventoryGrids.region_rect = Rect2( 0, 0, v2_InventoryDimensions.x * v2_TileSize.x, v2_InventoryDimensions.y * v2_TileSize.y )
