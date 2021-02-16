@@ -1,7 +1,12 @@
 Info:
 CursorItemDragOffset
 enter/exit close near items
+No multiple gui input processing
 
+add_item_to_inventory
+- Pixels to ID
+- Offset is very important to computation of Pixels to ID
+- I start in Y because it is the row, then X for the column
 
 Warning:
 connect must follow signal's signature

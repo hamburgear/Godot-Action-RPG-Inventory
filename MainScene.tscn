@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://InventoryManagement.gd" type="Script" id=1]
 [ext_resource path="res://Grid.png" type="Texture" id=2]
@@ -8,6 +8,9 @@
 [ext_resource path="res://Prefabs/Hammer.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Prefabs/Axe.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Prefabs/Sword.tscn" type="PackedScene" id=8]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 128, 128 )
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -30,6 +33,12 @@ __meta__ = {
 [node name="sp_InventoryGrids" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 centered = false
+
+[node name="a2_Inventory" type="Area2D" parent="sp_InventoryGrids"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="sp_InventoryGrids/a2_Inventory"]
+position = Vector2( 128, 128 )
+shape = SubResource( 2 )
 
 [node name="Dagger" parent="." instance=ExtResource( 5 )]
 margin_left = 528.0
