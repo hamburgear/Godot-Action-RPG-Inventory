@@ -14,7 +14,7 @@ extents = Vector2( 128, 128 )
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
-[node name="Control" type="Control"]
+[node name="MainRoot" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
@@ -41,40 +41,48 @@ position = Vector2( 128, 128 )
 shape = SubResource( 2 )
 
 [node name="Dagger" parent="." instance=ExtResource( 5 )]
-margin_left = 528.0
-margin_top = 64.0
-margin_right = 560.0
-margin_bottom = 96.0
+margin_left = 384.0
+margin_top = 16.0
+margin_right = 416.0
+margin_bottom = 48.0
 
 [node name="Shield" parent="." instance=ExtResource( 4 )]
-margin_left = 384.0
-margin_top = 32.0
-margin_right = 448.0
-margin_bottom = 128.0
+margin_left = 312.0
+margin_top = 16.0
+margin_right = 376.0
+margin_bottom = 112.0
 
 [node name="Axe" parent="." instance=ExtResource( 7 )]
-margin_left = 384.0
-margin_top = 208.0
-margin_right = 448.0
-margin_bottom = 304.0
+margin_left = 312.0
+margin_top = 120.0
+margin_right = 376.0
+margin_bottom = 216.0
 
 [node name="Hammer" parent="." instance=ExtResource( 6 )]
-margin_left = 528.0
-margin_top = 104.0
-margin_right = 560.0
-margin_bottom = 168.0
+margin_left = 384.0
+margin_top = 56.0
+margin_right = 416.0
+margin_bottom = 120.0
 
 [node name="Buckler" parent="." instance=ExtResource( 3 )]
 material = SubResource( 1 )
-margin_left = 568.0
-margin_top = 56.0
-margin_right = 632.0
-margin_bottom = 120.0
-
-[node name="Sword" parent="." instance=ExtResource( 8 )]
-margin_left = 568.0
+margin_left = 384.0
 margin_top = 128.0
-margin_right = 600.0
+margin_right = 448.0
 margin_bottom = 192.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Sword" parent="." instance=ExtResource( 8 )]
+margin_left = 424.0
+margin_top = 16.0
+margin_right = 456.0
+margin_bottom = 80.0
+
+[node name="btn_AddItem" type="Button" parent="."]
+margin_left = 496.0
+margin_top = 264.0
+margin_right = 624.0
+margin_bottom = 304.0
+text = "Add Loot Item"
+__meta__ = {
+"_edit_use_anchors_": false
+}

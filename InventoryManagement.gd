@@ -16,6 +16,7 @@ var col_InvalidColor: Color = Color(1, 0.36, 0.36, 1)
 var arr_OverlappingWithItems: Array
 var v2_ItemPrevPosition: Vector2
 var bl_IsSelectedItemInsideInventory: bool
+var btn_AddItem: Button
 
 func _ready():
 	cr_InventoryPanel = $cr_InventoryPanel
@@ -31,9 +32,15 @@ func _ready():
 	a2_Inventory.connect("area_exited", self, "item_goes_outside_inventory")
 	
 	for ctrl_Item in get_tree().get_nodes_in_group("item"):
-		ctrl_Item.connect("gui_input", self, "cursor_in_item", [ctrl_Item])
-		ctrl_Item.get_node("Sprite/Area2D").connect("area_entered", self, "overlapping_with_other_item", [ctrl_Item])
-		ctrl_Item.get_node("Sprite/Area2D").connect("area_exited", self, "not_overlapping_with_other_item", [ctrl_Item])
+		add_signal_connections(ctrl_Item)
+
+	btn_AddItem = $btn_AddItem
+	btn_AddItem.connect("button_up", self, "add_loot_item")
+
+func add_signal_connections(ctrl_Item: Control):
+	ctrl_Item.connect("gui_input", self, "cursor_in_item", [ctrl_Item])
+	ctrl_Item.get_node("Sprite/Area2D").connect("area_entered", self, "overlapping_with_other_item", [ctrl_Item])
+	ctrl_Item.get_node("Sprite/Area2D").connect("area_exited", self, "not_overlapping_with_other_item", [ctrl_Item])
 
 func cursor_in_item(event: InputEvent, ctrl_Item: Control):
 	if event.is_action_pressed("select_item"):
@@ -97,7 +104,7 @@ func add_item_to_inventory(ctrl_Item: Control) -> bool:
 	var v2_slotID: Vector2 = ctrl_Item.rect_position / v2_TileSize
 	var v2_ItemSlotSize: Vector2 = ctrl_Item.rect_size / v2_TileSize
 	
-	if (v2_slotID + v2_ItemSlotSize) > (v2_InventoryDimensions - Vector2(1, 1)):
+	if (v2_slotID + v2_ItemSlotSize - Vector2(1, 1)) > (v2_InventoryDimensions - Vector2(1, 1)):
 		return false
 		
 	if dct_InventoryItems.has(ctrl_Item):
@@ -121,3 +128,27 @@ func remove_item_in_inventory(ctrl_Item: Control):
 
 	if dct_InventoryItems.has(ctrl_Item):
 		dct_InventoryItems.erase(ctrl_Item)
+
+func add_loot_item():
+	var files = []
+	var dir = Directory.new()
+	dir.open("res://Prefabs/")
+	dir.list_dir_begin()
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with("."):
+			files.append(file)
+	dir.list_dir_end()
+	
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var str_ItemToLoad: String = files[rng.randi_range(0, files.size()-1)]
+	
+	var pksc_Item: PackedScene = load("res://Prefabs/" + str_ItemToLoad)
+	var ctrl_Item: Control = pksc_Item.instance()
+	ctrl_Item.rect_position = Vector2(500, 100)
+	add_signal_connections(ctrl_Item)
+	
+	self.call_deferred("add_child", ctrl_Item)

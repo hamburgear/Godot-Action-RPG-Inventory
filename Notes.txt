@@ -11,3 +11,7 @@ add_item_to_inventory
 Warning:
 connect must follow signal's signature
 collisionshape boundary - triggering
+
+
+compassion
+responses
