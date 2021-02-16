@@ -12,7 +12,7 @@ var bl_IsItemSelected: bool = false
 var ctrl_SelectedItem: Control
 var bl_IsDraggingItem: bool = false
 var v2_CursorItemDragOffset: Vector2 = Vector2(-8, -8)
-var col_OverlappingColor: Color = Color(1, 0.36, 0.36, 1)
+var col_InvalidColor: Color = Color(1, 0.36, 0.36, 1)
 var arr_OverlappingWithItems: Array
 var v2_ItemPrevPosition: Vector2
 var bl_IsSelectedItemInsideInventory: bool
@@ -74,7 +74,7 @@ func overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
 		
 	arr_OverlappingWithItems.append(ctrl_Item)
 	
-	ctrl_SelectedItem.get_node("Sprite").modulate = col_OverlappingColor
+	ctrl_SelectedItem.get_node("Sprite").modulate = col_InvalidColor
 	
 func not_overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
 	if area.get_parent().get_parent() == ctrl_SelectedItem:
