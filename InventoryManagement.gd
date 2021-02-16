@@ -104,7 +104,13 @@ func add_item_to_inventory(ctrl_Item: Control) -> bool:
 	var v2_slotID: Vector2 = ctrl_Item.rect_position / v2_TileSize
 	var v2_ItemSlotSize: Vector2 = ctrl_Item.rect_size / v2_TileSize
 	
-	if (v2_slotID + v2_ItemSlotSize - Vector2(1, 1)) > (v2_InventoryDimensions - Vector2(1, 1)):
+	var v2_ItemMaxSlotID: Vector2 = v2_slotID + v2_ItemSlotSize - Vector2(1, 1)
+	var v2_InventorySlotBounds: Vector2 = v2_InventoryDimensions - Vector2(1, 1)
+	
+	if v2_ItemMaxSlotID.x > v2_InventorySlotBounds.x:
+		return false
+		
+	if v2_ItemMaxSlotID.y > v2_InventorySlotBounds.y:
 		return false
 		
 	if dct_InventoryItems.has(ctrl_Item):
