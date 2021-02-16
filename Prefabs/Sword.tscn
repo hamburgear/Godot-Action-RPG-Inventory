@@ -3,7 +3,7 @@
 [ext_resource path="res://ItemSprites/Sword.png" type="Texture" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 16, 31 )
+extents = Vector2( 15, 31 )
 
 [node name="Sword" type="Control" groups=[
 "item",
