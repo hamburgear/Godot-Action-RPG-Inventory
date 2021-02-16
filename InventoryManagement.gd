@@ -24,7 +24,7 @@ func _ready():
 	sp_InventoryGrids.region_rect = Rect2( 0, 0, v2_InventoryDimensions.x * v2_TileSize.x, v2_InventoryDimensions.y * v2_TileSize.y )
 	
 	for ctrl_Item in get_tree().get_nodes_in_group("item"):
-		ctrl_Item.connect("mouse_entered", self, "cursor_in_item", [ctrl_Item])
+		ctrl_Item.connect("gui_input", self, "cursor_in_item", [ctrl_Item])
 		ctrl_Item.get_node("Sprite/Area2D").connect("area_entered", self, "overlapping_with_other_item", [ctrl_Item])
 		ctrl_Item.get_node("Sprite/Area2D").connect("area_exited", self, "not_overlapping_with_other_item", [ctrl_Item])
 
