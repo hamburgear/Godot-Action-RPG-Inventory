@@ -10,18 +10,17 @@ var arr_OverlappingWithItems: Array
 var v2_ItemPrevPosition: Vector2
 
 func _ready():
-	#Get Items from Group
 	arr_Items = get_tree().get_nodes_in_group("item")
 	
-	for item in arr_Items:
-		item.connect("gui_input", self, "cursor_in_item", [item])
-		item.get_node("Sprite/Area2D").connect("area_entered", self, "overlapping_with_other_item", [item])
-		item.get_node("Sprite/Area2D").connect("area_exited", self, "not_overlapping_with_other_item", [item])
+	for ctrl_Item in arr_Items:
+		ctrl_Item.connect("gui_input", self, "cursor_in_item", [ctrl_Item])
+		ctrl_Item.get_node("Sprite/Area2D").connect("area_entered", self, "overlapping_with_other_item", [ctrl_Item])
+		ctrl_Item.get_node("Sprite/Area2D").connect("area_exited", self, "not_overlapping_with_other_item", [ctrl_Item])
 
-func cursor_in_item(event: InputEvent, item: Control):
+func cursor_in_item(event: InputEvent, ctrl_Item: Control):
 	if event.is_action_pressed("select_item"):
 		bl_IsItemSelected = true
-		ctrl_SelectedItem = item
+		ctrl_SelectedItem = ctrl_Item
 		ctrl_SelectedItem.get_node("Sprite").set_z_index(1000)
 		v2_ItemPrevPosition = ctrl_SelectedItem.rect_position
 	
