@@ -198,19 +198,20 @@ __meta__ = {
 }
 
 [node name="lb_TotalItems" type="Label" parent="ctrl_Quantities"]
-margin_left = 112.0
+margin_left = 83.0
 margin_top = 104.0
-margin_right = 200.0
+margin_right = 192.0
 margin_bottom = 120.0
-text = "Total Items:"
+text = "Total Loot Items:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_TotalItems"]
-margin_left = 80.0
-margin_right = 168.0
-margin_bottom = 16.0
+margin_left = 115.0
+margin_top = 1.0
+margin_right = 203.0
+margin_bottom = 17.0
 text = "8"
 
 [node name="lb_LongAxe" type="Label" parent="ctrl_Quantities"]

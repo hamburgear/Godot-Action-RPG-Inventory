@@ -96,6 +96,7 @@ func overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
 		return
 		
 	arr_OverlappingWithItems.append(ctrl_Item)
+	
 	if ctrl_SelectedItem:
 		ctrl_SelectedItem.get_node("Sprite").modulate = col_InvalidColor
 	
@@ -166,13 +167,25 @@ func add_loot_item(str_ItemName: String):
 	
 	self.call_deferred("add_child", ctrl_Item)
 
-func size_sorter(a, b):
+func height_priority_size_sorter(a, b):
 	# Same Y, greater X
 	if a[1].y == b[1].y and a[1].x > b[1].x:
 			return true
 			
 	# Greater Y, disregard X
 	if a[1].y > b[1].y:
+		return true
+
+	return false
+	
+func width_priority_size_sorter(a, b):
+	# Same Y, greater X
+	if a[1].y == b[1].y and a[1].x > b[1].x:
+			return true
+			
+
+	# Greater X, disregard Y
+	if a[1].x > b[1].x:
 		return true
 		
 	return false
@@ -183,24 +196,22 @@ func initiate_sort_inventory():
 	
 	for ctrl_Item in dct_InventoryItems:
 		remove_signal_connections(ctrl_Item)
+	
+	var arr_InventoryItems: Array
+	#Convert dictionary to array
+	for item in dct_InventoryItems:
+		var v2_ItemSlotSize: Vector2 = item.rect_size / v2_TileSize
+		arr_InventoryItems.append([item, v2_ItemSlotSize])
 		
-	if !sort_inventory():
-		adjust_sort_inventory()
-		
+	arr_InventoryItems.sort_custom(self, "height_priority_size_sorter")
+	if sort_inventory(arr_InventoryItems):
+		arr_InventoryItems.sort_custom(self, "width_priority_size_sorter")
+		sort_inventory(arr_InventoryItems)
 	
 	for ctrl_Item in dct_InventoryItems:
 		add_signal_connections(ctrl_Item)
 
-func sort_inventory() -> bool:
-	
-	#Convert dictionary to array
-	var arr_InventoryItems: Array
-	for item in dct_InventoryItems:
-		var v2_ItemSlotSize: Vector2 = item.rect_size / v2_TileSize
-		arr_InventoryItems.append([item, v2_ItemSlotSize])
-	
-	arr_InventoryItems.sort_custom(self, "size_sorter")
-	
+func sort_inventory(arr_InventoryItems: Array):
 	dct_InventoryItemSlots.clear()
 	
 	var arr_InventoryBlankSlots: Array
@@ -210,16 +221,19 @@ func sort_inventory() -> bool:
 			arr_InventoryBlankSlots.append(Vector2(col_ctr, row_ctr))
 	
 	dct_InventoryItemSlots.clear()
-	
+	var ctrl_PrevItem: Control = arr_InventoryItems[0][0]
 	var i_ItemCtr: int = 0
+	var bl_IsSlotAvailable: bool
 	for item in arr_InventoryItems:
+		if i_ItemCtr > 0:
+			ctrl_PrevItem = arr_InventoryItems[i_ItemCtr-1][0]
 		var ctrl_Item: Control = item[0]
 		var v2_ItemSlotSize: Vector2 = item[1]
 		
 		var arr_AssignedSlots: Array
 		
 		for v2_BlankSlot in arr_InventoryBlankSlots:
-			var bl_IsSlotAvailable: bool = true
+			bl_IsSlotAvailable = true
 			var v2_UpperLeftSlotID: Vector2
 			
 			#Generate Item Length and Width IDs
@@ -255,12 +269,11 @@ func sort_inventory() -> bool:
 					dct_InventoryItemSlots[v2_AssignedSlotID] = ctrl_Item
 				arr_AssignedSlots.clear()
 				ctrl_Item.rect_position = v2_UpperLeftSlotID * v2_TileSize
-				i_ItemCtr+=1
 				break
-	
-	if i_ItemCtr < arr_InventoryItems.size() - 1:
-		return false
-	return true
-
-func adjust_sort_inventory():
-	pass
+		i_ItemCtr+=1
+		if i_ItemCtr == arr_InventoryItems.size():
+			if !bl_IsSlotAvailable:
+				return false
+			return true
+		
+		
