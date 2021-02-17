@@ -2,6 +2,7 @@ extends Control
 
 var v2_TileSize: Vector2 = Vector2(32, 32)
 var v2_InventoryDimensions: Vector2 = Vector2(8, 8)
+var i_SelectedItemZIndex: int = 1000
 var cr_InventoryPanel: ColorRect
 var sp_InventoryGrids: Sprite
 var a2_Inventory: Area2D
@@ -13,6 +14,8 @@ var ctrl_SelectedItem: Control
 var bl_IsDraggingItem: bool = false
 var v2_CursorItemDragOffset: Vector2 = Vector2(-8, -8)
 var col_InvalidColor: Color = Color(1, 0.36, 0.36, 1)
+var col_ValidColor: Color =  Color(1, 1, 1, 1)
+
 var arr_OverlappingWithItems: Array
 var v2_ItemPrevPosition: Vector2
 var bl_IsSelectedItemInsideInventory: bool
@@ -63,7 +66,7 @@ func cursor_in_item(event: InputEvent, ctrl_Item: Control):
 	if event.is_action_pressed("select_item"):
 		bl_IsItemSelected = true
 		ctrl_SelectedItem = ctrl_Item
-		ctrl_SelectedItem.get_node("Sprite").set_z_index(1000)
+		ctrl_SelectedItem.get_node("Sprite").set_z_index(i_SelectedItemZIndex)
 		v2_ItemPrevPosition = ctrl_SelectedItem.rect_position
 	
 	if event is InputEventMouseMotion:
@@ -74,7 +77,7 @@ func cursor_in_item(event: InputEvent, ctrl_Item: Control):
 		ctrl_SelectedItem.get_node("Sprite").set_z_index(0)
 		if arr_OverlappingWithItems.size() > 0:
 			ctrl_SelectedItem.rect_position = v2_ItemPrevPosition
-			ctrl_SelectedItem.get_node("Sprite").modulate = Color(1, 1, 1, 1)
+			ctrl_SelectedItem.get_node("Sprite").modulate = col_ValidColor
 		else:
 			if bl_IsSelectedItemInsideInventory: 
 				if !add_item_to_inventory(ctrl_SelectedItem):
@@ -110,7 +113,7 @@ func not_overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
 	arr_OverlappingWithItems.erase(ctrl_Item)
 
 	if arr_OverlappingWithItems.size() == 0 and bl_IsItemSelected:
-		ctrl_SelectedItem.get_node("Sprite").modulate = Color(1, 1, 1, 1)
+		ctrl_SelectedItem.get_node("Sprite").modulate = col_ValidColor
 
 func item_inside_inventory(area: Area2D):
 	bl_IsSelectedItemInsideInventory = true
