@@ -71,8 +71,6 @@ func cursor_in_item(event: InputEvent, ctrl_Item: Control):
 		ctrl_SelectedItem.get_node("Sprite").set_z_index(0)
 		if arr_OverlappingWithItems.size() > 0:
 			ctrl_SelectedItem.rect_position = v2_ItemPrevPosition
-			for i in arr_OverlappingWithItems:
-				print(i.name)
 			ctrl_SelectedItem.get_node("Sprite").modulate = Color(1, 1, 1, 1)
 		else:
 			if bl_IsSelectedItemInsideInventory: 
@@ -168,35 +166,18 @@ func add_loot_item():
 	rng.randomize()
 	var str_ItemToLoad: String = files[rng.randi_range(0, files.size()-1)]
 	
+	var lb_ItemQty: Label = $ctrl_Quantities.get_node("lb_" + str_ItemToLoad.trim_suffix(".tscn") + "/lb_Qty")
+	lb_ItemQty.text = str(int(lb_ItemQty.text) + 1)
+	
+	var lb_TotalQty: Label = $ctrl_Quantities.get_node("lb_TotalItems/lb_Qty")
+	lb_TotalQty.text = str(int(lb_TotalQty.text) + 1)
+	
 	var pksc_Item: PackedScene = load("res://Prefabs/" + str_ItemToLoad)
 	var ctrl_Item: Control = pksc_Item.instance()
 	ctrl_Item.rect_position = Vector2(500, 100)
 	add_signal_connections(ctrl_Item)
 	
 	self.call_deferred("add_child", ctrl_Item)
-
-func sort_inventory():
-	if dct_InventoryItems.size() == 0:
-		return
-	
-	for ctrl_Item in dct_InventoryItems:
-		ctrl_Item.rect_position = Vector2(400, 400)
-		ctrl_Item.visible = true
-		remove_signal_connections(ctrl_Item)
-	
-	
-	#Convert dictionary to array
-	var arr_InventoryItems: Array
-	for item in dct_InventoryItems:
-		var v2_ItemSlotSize: Vector2 = item.rect_size / v2_TileSize
-		arr_InventoryItems.append([item, v2_ItemSlotSize])
-	
-	arr_InventoryItems.sort_custom(self, "size_sorter")
-	
-	dct_InventoryItemSlots.clear()
-	
-	for ctrl_Item in dct_InventoryItems:
-		add_signal_connections(ctrl_Item)
 
 func size_sorter(a, b):
 	# Same Y, greater X
@@ -209,4 +190,90 @@ func size_sorter(a, b):
 		
 	return false
 
-
+func sort_inventory():
+	if dct_InventoryItems.size() == 0:
+		return
+	
+	for ctrl_Item in dct_InventoryItems:
+		remove_signal_connections(ctrl_Item)
+#		ctrl_Item.rect_position = Vector2(400, 400)
+#		ctrl_Item.visible = false
+		
+	#Convert dictionary to array
+	var arr_InventoryItems: Array
+	for item in dct_InventoryItems:
+		var v2_ItemSlotSize: Vector2 = item.rect_size / v2_TileSize
+		arr_InventoryItems.append([item, v2_ItemSlotSize])
+	
+	arr_InventoryItems.sort_custom(self, "size_sorter")
+	
+	dct_InventoryItemSlots.clear()
+	
+	var arr_InventoryBlankSlots: Array
+	for col_ctr in v2_InventoryDimensions.x:
+			for row_ctr in v2_InventoryDimensions.y:
+				arr_InventoryBlankSlots.append(Vector2(col_ctr, row_ctr))
+	print("Slots")
+	print(arr_InventoryBlankSlots)
+#	print(arr_InventoryBlankSlots.find(Vector2(0,1)))
+#	for i_CtrX in v2_InventoryDimensions.x:
+#		for i_CtrY in v2_InventoryDimensions.y:
+#			dct_InventoryBlankSlots[Vector2(i_CtrX, i_CtrY)] = null
+	
+#	var arr_Item: Array = arr_InventoryItems[0] #Always get the first item in the sorted items pool
+#	var ctrl_Item: Control = arr_Item[0]
+#	var v2_ItemSlotSize: Vector2 = arr_Item[1]
+	
+	for item in arr_InventoryItems:
+		var ctrl_Item: Control = item[0]
+		var v2_ItemSlotSize: Vector2 = item[1]
+		
+		print(ctrl_Item.name + " - " + str(v2_ItemSlotSize))
+		
+		var arr_AssignedSlots: Array
+		
+		for v2_BlankSlot in arr_InventoryBlankSlots:
+			var bl_IsSlotAvailable: bool = true
+			var v2_UpperLeftSlotID: Vector2
+			
+			#Generate Item Length and Width IDs
+			var arr_ItemDimensionIDs: Array
+			for i_WidthCtr in v2_ItemSlotSize.x:
+				for i_LengthCtr in v2_ItemSlotSize.y:
+					if i_WidthCtr == 0 and i_LengthCtr == 0:
+						print("Upper Left ID: " + str(v2_BlankSlot))
+						v2_UpperLeftSlotID = v2_BlankSlot
+					arr_ItemDimensionIDs.append(Vector2(i_WidthCtr, i_LengthCtr))
+			
+			for v2_DimensionID in arr_ItemDimensionIDs:
+				var v2_SlotID: Vector2 = v2_BlankSlot + v2_DimensionID
+				
+				if v2_SlotID.y >= v2_InventoryDimensions.y:
+					bl_IsSlotAvailable = false
+					arr_AssignedSlots.clear()
+					break
+				if v2_SlotID.x >= v2_InventoryDimensions.x:
+					bl_IsSlotAvailable = false
+					arr_AssignedSlots.clear()
+					break
+					
+				print("ctrl_Item: "+ str(ctrl_Item.name) + ", v2_DimensionID: " + str(v2_DimensionID) + ", v2_SlotID: " + str(v2_SlotID))
+				
+#				print("Find: " + str(v2_SlotID) + ", type: " + str(typeof(v2_SlotID)))
+				if arr_InventoryBlankSlots.find(v2_SlotID) != -1:
+					arr_AssignedSlots.append(v2_SlotID)
+				else:
+					bl_IsSlotAvailable = false
+					arr_AssignedSlots.clear()
+					break
+		
+			if bl_IsSlotAvailable:
+				for v2_AssignedSlotID in arr_AssignedSlots:
+					arr_InventoryBlankSlots.erase(v2_AssignedSlotID)
+				arr_AssignedSlots.clear()
+#				print(v2_UpperLeftSlotID)
+				ctrl_Item.rect_position = v2_UpperLeftSlotID * v2_TileSize
+				break
+				
+	for ctrl_Item in dct_InventoryItems:
+		add_signal_connections(ctrl_Item)

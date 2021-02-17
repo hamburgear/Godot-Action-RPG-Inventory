@@ -6,7 +6,7 @@
 [ext_resource path="res://Prefabs/Shield.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Prefabs/Dagger.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Prefabs/Hammer.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Prefabs/Axe.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Prefabs/ShortAxe.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Prefabs/Sword.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Prefabs/LongAxe.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Prefabs/Bow.tscn" type="PackedScene" id=10]
@@ -54,7 +54,7 @@ margin_top = 16.0
 margin_right = 344.0
 margin_bottom = 112.0
 
-[node name="Axe" parent="." instance=ExtResource( 7 )]
+[node name="ShortAxe" parent="." instance=ExtResource( 7 )]
 margin_left = 280.0
 margin_top = 120.0
 margin_right = 344.0
@@ -110,3 +110,157 @@ margin_left = 352.0
 margin_top = 200.0
 margin_right = 416.0
 margin_bottom = 232.0
+
+[node name="ctrl_Quantities" type="Control" parent="."]
+margin_left = 24.0
+margin_top = 344.0
+margin_right = 64.0
+margin_bottom = 384.0
+
+[node name="cr_DetailsBackground" type="ColorRect" parent="ctrl_Quantities"]
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 336.0
+margin_bottom = 128.0
+color = Color( 0.164706, 0.164706, 0.164706, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_TotalItems" type="Label" parent="ctrl_Quantities"]
+margin_left = 112.0
+margin_top = 104.0
+margin_right = 200.0
+margin_bottom = 120.0
+text = "Total Items:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_TotalItems"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "8"
+
+[node name="lb_LongAxe" type="Label" parent="ctrl_Quantities"]
+margin_right = 88.0
+margin_bottom = 16.0
+text = "Long Axes:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_LongAxe"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "1"
+
+[node name="lb_Shield" type="Label" parent="ctrl_Quantities"]
+margin_top = 24.0
+margin_right = 88.0
+margin_bottom = 40.0
+text = "Shields:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_Shield"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "1"
+
+[node name="lb_ShortAxe" type="Label" parent="ctrl_Quantities"]
+margin_top = 48.0
+margin_right = 88.0
+margin_bottom = 64.0
+text = "Short Axes:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_ShortAxe"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "1"
+
+[node name="lb_Hammer" type="Label" parent="ctrl_Quantities"]
+margin_left = 232.0
+margin_right = 320.0
+margin_bottom = 16.0
+text = "Hammers:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_Hammer"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "1"
+
+[node name="lb_Sword" type="Label" parent="ctrl_Quantities"]
+margin_left = 232.0
+margin_top = 24.0
+margin_right = 320.0
+margin_bottom = 40.0
+text = "Swords:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_Sword"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "1"
+
+[node name="lb_Buckler" type="Label" parent="ctrl_Quantities"]
+margin_top = 72.0
+margin_right = 88.0
+margin_bottom = 88.0
+text = "Bucklers:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_Buckler"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "1"
+
+[node name="lb_Bow" type="Label" parent="ctrl_Quantities"]
+margin_left = 232.0
+margin_top = 48.0
+margin_right = 320.0
+margin_bottom = 64.0
+text = "Bows:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_Bow"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "1"
+
+[node name="lb_Dagger" type="Label" parent="ctrl_Quantities"]
+margin_left = 232.0
+margin_top = 72.0
+margin_right = 320.0
+margin_bottom = 88.0
+text = "Daggers:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lb_Qty" type="Label" parent="ctrl_Quantities/lb_Dagger"]
+margin_left = 80.0
+margin_right = 168.0
+margin_bottom = 16.0
+text = "1"

@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://ItemSprites/Axe.png" type="Texture" id=1]
+[ext_resource path="res://ItemSprites/ShortAxe.png" type="Texture" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 31, 47 )
 
-[node name="Axe" type="Control" groups=[
+[node name="ShortAxe" type="Control" groups=[
 "item",
 ]]
 margin_right = 64.0
