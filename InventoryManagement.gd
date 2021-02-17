@@ -17,6 +17,7 @@ var arr_OverlappingWithItems: Array
 var v2_ItemPrevPosition: Vector2
 var bl_IsSelectedItemInsideInventory: bool
 var btn_AddItem: Button
+var btn_SortInventory: Button
 
 func _ready():
 	cr_InventoryPanel = $cr_InventoryPanel
@@ -36,11 +37,24 @@ func _ready():
 
 	btn_AddItem = $btn_AddItem
 	btn_AddItem.connect("button_up", self, "add_loot_item")
+	
+	btn_SortInventory = $btn_SortInventory
+	btn_SortInventory.connect("button_up", self, "sort_inventory")
 
 func add_signal_connections(ctrl_Item: Control):
 	ctrl_Item.connect("gui_input", self, "cursor_in_item", [ctrl_Item])
 	ctrl_Item.get_node("Sprite/Area2D").connect("area_entered", self, "overlapping_with_other_item", [ctrl_Item])
 	ctrl_Item.get_node("Sprite/Area2D").connect("area_exited", self, "not_overlapping_with_other_item", [ctrl_Item])
+
+func remove_signal_connections(ctrl_Item: Control):
+	if ctrl_Item.is_connected("gui_input", self, "cursor_in_item"):
+		ctrl_Item.disconnect("gui_input", self, "cursor_in_item")
+	
+	if ctrl_Item.get_node("Sprite/Area2D").is_connected("area_entered", self, "overlapping_with_other_item"):
+		ctrl_Item.get_node("Sprite/Area2D").disconnect("area_entered", self, "overlapping_with_other_item")
+		
+	if ctrl_Item.get_node("Sprite/Area2D").is_connected("area_exited", self, "not_overlapping_with_other_item"):
+		ctrl_Item.get_node("Sprite/Area2D").disconnect("area_exited", self, "not_overlapping_with_other_item")
 
 func cursor_in_item(event: InputEvent, ctrl_Item: Control):
 	if event.is_action_pressed("select_item"):
@@ -57,6 +71,8 @@ func cursor_in_item(event: InputEvent, ctrl_Item: Control):
 		ctrl_SelectedItem.get_node("Sprite").set_z_index(0)
 		if arr_OverlappingWithItems.size() > 0:
 			ctrl_SelectedItem.rect_position = v2_ItemPrevPosition
+			for i in arr_OverlappingWithItems:
+				print(i.name)
 			ctrl_SelectedItem.get_node("Sprite").modulate = Color(1, 1, 1, 1)
 		else:
 			if bl_IsSelectedItemInsideInventory: 
@@ -79,8 +95,8 @@ func overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
 		return
 		
 	arr_OverlappingWithItems.append(ctrl_Item)
-	
-	ctrl_SelectedItem.get_node("Sprite").modulate = col_InvalidColor
+	if ctrl_SelectedItem:
+		ctrl_SelectedItem.get_node("Sprite").modulate = col_InvalidColor
 	
 func not_overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
 	if area.get_parent().get_parent() == ctrl_SelectedItem:
@@ -158,3 +174,39 @@ func add_loot_item():
 	add_signal_connections(ctrl_Item)
 	
 	self.call_deferred("add_child", ctrl_Item)
+
+func sort_inventory():
+	if dct_InventoryItems.size() == 0:
+		return
+	
+	for ctrl_Item in dct_InventoryItems:
+		ctrl_Item.rect_position = Vector2(400, 400)
+		ctrl_Item.visible = true
+		remove_signal_connections(ctrl_Item)
+	
+	
+	#Convert dictionary to array
+	var arr_InventoryItems: Array
+	for item in dct_InventoryItems:
+		var v2_ItemSlotSize: Vector2 = item.rect_size / v2_TileSize
+		arr_InventoryItems.append([item, v2_ItemSlotSize])
+	
+	arr_InventoryItems.sort_custom(self, "size_sorter")
+	
+	dct_InventoryItemSlots.clear()
+	
+	for ctrl_Item in dct_InventoryItems:
+		add_signal_connections(ctrl_Item)
+
+func size_sorter(a, b):
+	# Same Y, greater X
+	if a[1].y == b[1].y and a[1].x > b[1].x:
+			return true
+			
+	# Greater Y, disregard X
+	if a[1].y > b[1].y:
+		return true
+		
+	return false
+
+

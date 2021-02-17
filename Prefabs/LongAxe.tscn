@@ -1,15 +1,15 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://ItemSprites/Hammer.png" type="Texture" id=1]
+[ext_resource path="res://ItemSprites/LongAxe.png" type="Texture" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 15, 31 )
+extents = Vector2( 15, 63 )
 
-[node name="Hammer" type="Control" groups=[
+[node name="LongAxe" type="Control" groups=[
 "item",
 ]]
 margin_right = 32.0
-margin_bottom = 64.0
+margin_bottom = 128.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -21,5 +21,5 @@ centered = false
 [node name="Area2D" type="Area2D" parent="Sprite"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/Area2D"]
-position = Vector2( 16, 32 )
+position = Vector2( 16, 64 )
 shape = SubResource( 1 )

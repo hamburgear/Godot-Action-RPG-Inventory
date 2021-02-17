@@ -8,10 +8,17 @@ add_item_to_inventory
 - Offset is very important to computation of Pixels to ID
 - I start in Y because it is the row, then X for the column
 
+sorting precedence
+- longer y first
+- longer x with respect to y size
+- placement
+	- Column top to bottom
+	- Row left to right
+	- then check for vacancies - check from unplaced item appropriate size
+
 Warning:
-connect must follow signal's signature
-collisionshape boundary - triggering
+- connect must follow signal's signature
+- collisionshape boundary - triggering - less 1 pixel each side
 
 
-compassion
-responses
+
