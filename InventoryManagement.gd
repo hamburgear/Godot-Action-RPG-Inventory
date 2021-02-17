@@ -16,8 +16,6 @@ var col_InvalidColor: Color = Color(1, 0.36, 0.36, 1)
 var arr_OverlappingWithItems: Array
 var v2_ItemPrevPosition: Vector2
 var bl_IsSelectedItemInsideInventory: bool
-var btn_AddItem: Button
-var btn_SortInventory: Button
 
 func _ready():
 	cr_InventoryPanel = $cr_InventoryPanel
@@ -35,11 +33,16 @@ func _ready():
 	for ctrl_Item in get_tree().get_nodes_in_group("item"):
 		add_signal_connections(ctrl_Item)
 
-	btn_AddItem = $btn_AddItem
-	btn_AddItem.connect("button_up", self, "add_loot_item")
-	
-	btn_SortInventory = $btn_SortInventory
-	btn_SortInventory.connect("button_up", self, "sort_inventory")
+	$btn_AddLongAxe.connect("button_up", self, "add_loot_item", ["LongAxe"])
+	$btn_AddShield.connect("button_up", self, "add_loot_item", ["Shield"])
+	$btn_AddShortAxe.connect("button_up", self, "add_loot_item", ["ShortAxe"])
+	$btn_AddBuckler.connect("button_up", self, "add_loot_item", ["Buckler"])
+	$btn_AddHammer.connect("button_up", self, "add_loot_item", ["Hammer"])
+	$btn_AddSword.connect("button_up", self, "add_loot_item", ["Sword"])
+	$btn_AddBow.connect("button_up", self, "add_loot_item", ["Bow"])
+	$btn_AddDagger.connect("button_up", self, "add_loot_item", ["Dagger"])
+		
+	$btn_SortInventory.connect("button_up", self, "initiate_sort_inventory")
 
 func add_signal_connections(ctrl_Item: Control):
 	ctrl_Item.connect("gui_input", self, "cursor_in_item", [ctrl_Item])
@@ -149,30 +152,14 @@ func remove_item_in_inventory(ctrl_Item: Control):
 	if dct_InventoryItems.has(ctrl_Item):
 		dct_InventoryItems.erase(ctrl_Item)
 
-func add_loot_item():
-	var files = []
-	var dir = Directory.new()
-	dir.open("res://Prefabs/")
-	dir.list_dir_begin()
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif not file.begins_with("."):
-			files.append(file)
-	dir.list_dir_end()
-	
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	var str_ItemToLoad: String = files[rng.randi_range(0, files.size()-1)]
-	
-	var lb_ItemQty: Label = $ctrl_Quantities.get_node("lb_" + str_ItemToLoad.trim_suffix(".tscn") + "/lb_Qty")
+func add_loot_item(str_ItemName: String):
+	var lb_ItemQty: Label = $ctrl_Quantities.get_node("lb_" + str_ItemName + "/lb_Qty")
 	lb_ItemQty.text = str(int(lb_ItemQty.text) + 1)
 	
 	var lb_TotalQty: Label = $ctrl_Quantities.get_node("lb_TotalItems/lb_Qty")
 	lb_TotalQty.text = str(int(lb_TotalQty.text) + 1)
 	
-	var pksc_Item: PackedScene = load("res://Prefabs/" + str_ItemToLoad)
+	var pksc_Item: PackedScene = load("res://Prefabs/" + str_ItemName + ".tscn")
 	var ctrl_Item: Control = pksc_Item.instance()
 	ctrl_Item.rect_position = Vector2(500, 100)
 	add_signal_connections(ctrl_Item)
@@ -190,15 +177,22 @@ func size_sorter(a, b):
 		
 	return false
 
-func sort_inventory():
+func initiate_sort_inventory():
 	if dct_InventoryItems.size() == 0:
 		return
 	
 	for ctrl_Item in dct_InventoryItems:
 		remove_signal_connections(ctrl_Item)
-#		ctrl_Item.rect_position = Vector2(400, 400)
-#		ctrl_Item.visible = false
 		
+	if !sort_inventory():
+		adjust_sort_inventory()
+		
+	
+	for ctrl_Item in dct_InventoryItems:
+		add_signal_connections(ctrl_Item)
+
+func sort_inventory() -> bool:
+	
 	#Convert dictionary to array
 	var arr_InventoryItems: Array
 	for item in dct_InventoryItems:
@@ -210,25 +204,17 @@ func sort_inventory():
 	dct_InventoryItemSlots.clear()
 	
 	var arr_InventoryBlankSlots: Array
+	
 	for col_ctr in v2_InventoryDimensions.x:
-			for row_ctr in v2_InventoryDimensions.y:
-				arr_InventoryBlankSlots.append(Vector2(col_ctr, row_ctr))
-	print("Slots")
-	print(arr_InventoryBlankSlots)
-#	print(arr_InventoryBlankSlots.find(Vector2(0,1)))
-#	for i_CtrX in v2_InventoryDimensions.x:
-#		for i_CtrY in v2_InventoryDimensions.y:
-#			dct_InventoryBlankSlots[Vector2(i_CtrX, i_CtrY)] = null
+		for row_ctr in v2_InventoryDimensions.y:
+			arr_InventoryBlankSlots.append(Vector2(col_ctr, row_ctr))
 	
-#	var arr_Item: Array = arr_InventoryItems[0] #Always get the first item in the sorted items pool
-#	var ctrl_Item: Control = arr_Item[0]
-#	var v2_ItemSlotSize: Vector2 = arr_Item[1]
+	dct_InventoryItemSlots.clear()
 	
+	var i_ItemCtr: int = 0
 	for item in arr_InventoryItems:
 		var ctrl_Item: Control = item[0]
 		var v2_ItemSlotSize: Vector2 = item[1]
-		
-		print(ctrl_Item.name + " - " + str(v2_ItemSlotSize))
 		
 		var arr_AssignedSlots: Array
 		
@@ -241,7 +227,6 @@ func sort_inventory():
 			for i_WidthCtr in v2_ItemSlotSize.x:
 				for i_LengthCtr in v2_ItemSlotSize.y:
 					if i_WidthCtr == 0 and i_LengthCtr == 0:
-						print("Upper Left ID: " + str(v2_BlankSlot))
 						v2_UpperLeftSlotID = v2_BlankSlot
 					arr_ItemDimensionIDs.append(Vector2(i_WidthCtr, i_LengthCtr))
 			
@@ -257,9 +242,6 @@ func sort_inventory():
 					arr_AssignedSlots.clear()
 					break
 					
-				print("ctrl_Item: "+ str(ctrl_Item.name) + ", v2_DimensionID: " + str(v2_DimensionID) + ", v2_SlotID: " + str(v2_SlotID))
-				
-#				print("Find: " + str(v2_SlotID) + ", type: " + str(typeof(v2_SlotID)))
 				if arr_InventoryBlankSlots.find(v2_SlotID) != -1:
 					arr_AssignedSlots.append(v2_SlotID)
 				else:
@@ -270,10 +252,15 @@ func sort_inventory():
 			if bl_IsSlotAvailable:
 				for v2_AssignedSlotID in arr_AssignedSlots:
 					arr_InventoryBlankSlots.erase(v2_AssignedSlotID)
+					dct_InventoryItemSlots[v2_AssignedSlotID] = ctrl_Item
 				arr_AssignedSlots.clear()
-#				print(v2_UpperLeftSlotID)
 				ctrl_Item.rect_position = v2_UpperLeftSlotID * v2_TileSize
+				i_ItemCtr+=1
 				break
-				
-	for ctrl_Item in dct_InventoryItems:
-		add_signal_connections(ctrl_Item)
+	
+	if i_ItemCtr < arr_InventoryItems.size() - 1:
+		return false
+	return true
+
+func adjust_sort_inventory():
+	pass

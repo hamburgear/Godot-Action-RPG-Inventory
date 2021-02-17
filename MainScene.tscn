@@ -85,12 +85,82 @@ margin_top = 16.0
 margin_right = 464.0
 margin_bottom = 144.0
 
-[node name="btn_AddItem" type="Button" parent="."]
-margin_left = 512.0
+[node name="btn_AddLongAxe" type="Button" parent="."]
+margin_left = 464.0
 margin_top = 272.0
-margin_right = 640.0
+margin_right = 592.0
 margin_bottom = 312.0
-text = "Add Loot Item"
+text = "Add Long Axe"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn_AddShield" type="Button" parent="."]
+margin_left = 464.0
+margin_top = 328.0
+margin_right = 592.0
+margin_bottom = 368.0
+text = "Add Shield"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn_AddShortAxe" type="Button" parent="."]
+margin_left = 464.0
+margin_top = 384.0
+margin_right = 592.0
+margin_bottom = 424.0
+text = "Add Short Axe"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn_AddBuckler" type="Button" parent="."]
+margin_left = 464.0
+margin_top = 440.0
+margin_right = 592.0
+margin_bottom = 480.0
+text = "Add Buckler"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn_AddHammer" type="Button" parent="."]
+margin_left = 608.0
+margin_top = 272.0
+margin_right = 736.0
+margin_bottom = 312.0
+text = "Add Hammer"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn_AddSword" type="Button" parent="."]
+margin_left = 608.0
+margin_top = 328.0
+margin_right = 736.0
+margin_bottom = 368.0
+text = "Add Sword"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn_AddBow" type="Button" parent="."]
+margin_left = 608.0
+margin_top = 384.0
+margin_right = 736.0
+margin_bottom = 424.0
+text = "Add Bow"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn_AddDagger" type="Button" parent="."]
+margin_left = 608.0
+margin_top = 440.0
+margin_right = 736.0
+margin_bottom = 480.0
+text = "Add Dagger"
 __meta__ = {
 "_edit_use_anchors_": false
 }
