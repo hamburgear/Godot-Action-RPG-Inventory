@@ -89,7 +89,7 @@ func cursor_in_item(event: InputEvent, ctrl_Item: Control):
 		
 func _process(delta):
 	if bl_IsDraggingItem:
-		ctrl_SelectedItem.rect_position = (self.get_global_mouse_position() + v2_CursorItemDragOffset).snapped(Vector2(32,32))
+		ctrl_SelectedItem.rect_position = (self.get_global_mouse_position() + v2_CursorItemDragOffset).snapped(v2_TileSize)
 
 func overlapping_with_other_item(area: Area2D, ctrl_Item: Control):
 	if area.get_parent().get_parent() == ctrl_SelectedItem:
@@ -135,7 +135,7 @@ func add_item_to_inventory(ctrl_Item: Control) -> bool:
 		return false
 		
 	if dct_InventoryItems.has(ctrl_Item):
-		remove_item_in_inventory(ctrl_Item)
+		remove_item_in_inventory_slot(ctrl_Item, dct_InventoryItems[ctrl_Item])
 	
 	for y_ctr in range(v2_ItemSlotSize.y):
 		for x_ctr in range(v2_ItemSlotSize.x):
@@ -144,17 +144,13 @@ func add_item_to_inventory(ctrl_Item: Control) -> bool:
 	dct_InventoryItems[ctrl_Item] = v2_slotID
 	return true
 
-func remove_item_in_inventory(ctrl_Item: Control):
-	var v2_slotID: Vector2 = ctrl_Item.rect_position / v2_TileSize
+func remove_item_in_inventory_slot(ctrl_Item: Control, v2_ExistingSlotID: Vector2):
 	var v2_ItemSlotSize: Vector2 = ctrl_Item.rect_size / v2_TileSize
 	
-	for y_ctr in range(v2_ItemSlotSize.y):
-		for x_ctr in range(v2_ItemSlotSize.x):
-			if dct_InventoryItemSlots.has(Vector2(v2_slotID.x + x_ctr, v2_slotID.y + y_ctr)):
-				dct_InventoryItemSlots.erase(Vector2(v2_slotID.x + x_ctr, v2_slotID.y + y_ctr))
-
-	if dct_InventoryItems.has(ctrl_Item):
-		dct_InventoryItems.erase(ctrl_Item)
+	for y_Ctr in range(v2_ItemSlotSize.y):
+		for x_Ctr in range(v2_ItemSlotSize.x):
+			if dct_InventoryItemSlots.has(Vector2(v2_ExistingSlotID.x + x_Ctr, v2_ExistingSlotID.y + y_Ctr)):
+				dct_InventoryItemSlots.erase(Vector2(v2_ExistingSlotID.x + x_Ctr, v2_ExistingSlotID.y + y_Ctr))
 
 func add_loot_item(str_ItemName: String):
 	var lb_ItemQty: Label = $ctrl_Quantities.get_node("lb_" + str_ItemName + "/lb_Qty")
@@ -223,7 +219,6 @@ func sort_inventory(arr_InventoryItems: Array):
 		for row_ctr in v2_InventoryDimensions.y:
 			arr_InventoryBlankSlots.append(Vector2(col_ctr, row_ctr))
 	
-	dct_InventoryItemSlots.clear()
 	var ctrl_PrevItem: Control = arr_InventoryItems[0][0]
 	var i_ItemCtr: int = 0
 	var bl_IsSlotAvailable: bool
@@ -239,7 +234,7 @@ func sort_inventory(arr_InventoryItems: Array):
 			bl_IsSlotAvailable = true
 			var v2_UpperLeftSlotID: Vector2
 			
-			#Generate Item Length and Width IDs
+			#Generate Item Height and Width IDs
 			var arr_ItemDimensionIDs: Array
 			for i_WidthCtr in v2_ItemSlotSize.x:
 				for i_LengthCtr in v2_ItemSlotSize.y:
@@ -278,5 +273,4 @@ func sort_inventory(arr_InventoryItems: Array):
 			if !bl_IsSlotAvailable:
 				return false
 			return true
-		
 		
