@@ -219,12 +219,9 @@ func sort_inventory(arr_InventoryItems: Array):
 		for row_ctr in v2_InventoryDimensions.y:
 			arr_InventoryBlankSlots.append(Vector2(col_ctr, row_ctr))
 	
-	var ctrl_PrevItem: Control = arr_InventoryItems[0][0]
 	var i_ItemCtr: int = 0
 	var bl_IsSlotAvailable: bool
 	for item in arr_InventoryItems:
-		if i_ItemCtr > 0:
-			ctrl_PrevItem = arr_InventoryItems[i_ItemCtr-1][0]
 		var ctrl_Item: Control = item[0]
 		var v2_ItemSlotSize: Vector2 = item[1]
 		
